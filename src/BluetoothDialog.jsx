@@ -22,7 +22,7 @@ function BluetoothDialog() {
       </DialogTitle>
       <DialogContent>
         <DialogContentText id='alert-dialog-description'>
-          to use this app, please connect a compatible smartcube
+          to use this app, please connect a compatible (gan) smartcube
         </DialogContentText>
       </DialogContent>
       <DialogActions>
