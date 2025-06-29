@@ -9,11 +9,11 @@ import DialogTitle from '@mui/material/DialogTitle'
 import BluetoothContext from './BluetoothContext'
 
 function BluetoothDialog() {
-  const { isConnected, connect } = useContext(BluetoothContext)
+  const { connection, connect } = useContext(BluetoothContext)
 
   return (
     <Dialog
-      open={!isConnected}
+      open={!connection}
       aria-labelledby='alert-dialog-title'
       aria-describedby='alert-dialog-description'
     >
