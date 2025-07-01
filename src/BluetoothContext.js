@@ -1,5 +1,5 @@
-import { createContext } from 'react'
+import { createContext } from "react";
 
-const BluetoothContext = createContext(null)
+const BluetoothContext = createContext(null);
 
-export default BluetoothContext
+export default BluetoothContext;
