@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 
 import CubeDisplay from "./CubeDisplay";
 
-function MainGrid() {
+const MainGrid = () => {
   return (
     <Box
       sx={{
@@ -37,6 +37,6 @@ function MainGrid() {
       </Grid>
     </Box>
   );
-}
+};
 
 export default MainGrid;

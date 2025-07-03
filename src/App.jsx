@@ -5,7 +5,7 @@ import ConnectionDialog from "./components/ConnectionDialog";
 import MainGrid from "./components/MainGrid";
 import ConnectionAppBar from "./components/ConnectionAppBar";
 
-function App() {
+const App = () => {
   return (
     <BluetoothProvider>
       <ConnectionDialog />
@@ -21,6 +21,6 @@ function App() {
       </Box>
     </BluetoothProvider>
   );
-}
+};
 
 export default App;

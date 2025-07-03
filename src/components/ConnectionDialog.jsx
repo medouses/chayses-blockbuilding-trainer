@@ -8,12 +8,12 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import BluetoothContext from "../BluetoothContext";
 
-function ConnectionDialog() {
-  const { connection, connect } = useContext(BluetoothContext);
+const ConnectionDialog = () => {
+  const { deviceState, connect } = useContext(BluetoothContext);
 
   return (
     <Dialog
-      open={!connection}
+      open={!deviceState.isConnected}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -28,6 +28,6 @@ function ConnectionDialog() {
       </DialogActions>
     </Dialog>
   );
-}
+};
 
 export default ConnectionDialog;

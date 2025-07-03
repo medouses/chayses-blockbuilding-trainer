@@ -1,29 +1,10 @@
-import { useRef, useContext, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { TwistyPlayer } from "cubing/twisty";
 import Paper from "@mui/material/Paper";
 
-import BluetoothContext from "../BluetoothContext";
-
-function CubeDisplay({ minHeight }) {
+const CubeDisplay = ({ minHeight }) => {
   const containerRef = useRef(null);
   const playerRef = useRef(null);
-  const subscriptionRef = useRef(null);
-
-  const { connection } = useContext(BluetoothContext);
-
-  function handleCubeEvent(event) {
-    // when cube is moved, show it on the player
-    if (event.type == "MOVE") {
-      playerRef.current?.experimentalAddMove(event.move, { cancel: false });
-    }
-  }
-
-  // keep track of rxjs event subscription in a ref guard
-  if (!connection) {
-    subscriptionRef.current = null;
-  } else if (!subscriptionRef.current) {
-    subscriptionRef.current = connection.events$.subscribe(handleCubeEvent);
-  }
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -43,9 +24,6 @@ function CubeDisplay({ minHeight }) {
 
     return () => {
       player?.remove();
-
-      // must unsub manually as connection may still exist
-      subscriptionRef.current?.unsubscribe();
     };
   }, []);
 
@@ -61,6 +39,6 @@ function CubeDisplay({ minHeight }) {
       ref={containerRef}
     />
   );
-}
+};
 
 export default CubeDisplay;

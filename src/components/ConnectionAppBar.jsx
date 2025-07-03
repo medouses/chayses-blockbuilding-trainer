@@ -6,11 +6,11 @@ import Button from "@mui/material/Button";
 
 import BluetoothContext from "../BluetoothContext";
 
-function ConnectionAppBar() {
-  const { connection, disconnect } = useContext(BluetoothContext);
+const ConnectionAppBar = () => {
+  const { deviceState, disconnect } = useContext(BluetoothContext);
 
-  // show an error message instead if connection is null
-  if (!connection) {
+  // show an error message if not connected
+  if (!deviceState.isConnected) {
     return (
       <AppBar position="static" color="error" enableColorOnDark>
         <Toolbar variant="dense">
@@ -25,14 +25,14 @@ function ConnectionAppBar() {
   return (
     <AppBar position="static">
       <Toolbar variant="dense">
-        <Typography sx={{ mr: 3 }}>cube: {connection.deviceName}</Typography>
+        <Typography sx={{ mr: 3 }}>cube: {deviceState.deviceName}</Typography>
         <Typography sx={{ flexGrow: 1 }}>
-          mac address: {connection.deviceMAC}
+          mac address: {deviceState.deviceMac}
         </Typography>
         <Button onClick={disconnect}>disconnect cube</Button>
       </Toolbar>
     </AppBar>
   );
-}
+};
 
 export default ConnectionAppBar;
