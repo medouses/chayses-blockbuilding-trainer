@@ -1,13 +1,13 @@
 import Box from "@mui/material/Box";
 
-import BluetoothProvider from "./components/BluetoothProvider";
+import SmartPuzzleProvider from "./components/SmartPuzzleProvider";
 import ConnectionDialog from "./components/ConnectionDialog";
 import MainGrid from "./components/MainGrid";
 import ConnectionAppBar from "./components/ConnectionAppBar";
 
 const App = () => {
   return (
-    <BluetoothProvider>
+    <SmartPuzzleProvider>
       <ConnectionDialog />
       <Box
         sx={{
@@ -19,7 +19,7 @@ const App = () => {
         <MainGrid />
         <ConnectionAppBar />
       </Box>
-    </BluetoothProvider>
+    </SmartPuzzleProvider>
   );
 };
 

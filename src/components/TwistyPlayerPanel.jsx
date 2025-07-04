@@ -1,10 +1,21 @@
-import { useRef, useEffect } from "react";
+import { useRef, useContext, useEffect } from "react";
 import { TwistyPlayer } from "cubing/twisty";
 import Paper from "@mui/material/Paper";
 
-const CubeDisplay = ({ minHeight }) => {
+import SmartPuzzleContext from "../SmartPuzzleContext";
+
+const TwistyPlayerPanel = ({ minHeight }) => {
   const containerRef = useRef(null);
   const playerRef = useRef(null);
+
+  const { deviceState } = useContext(SmartPuzzleContext);
+  const { lastFacelets } = deviceState;
+
+  useEffect(() => {
+    if (playerRef.current) {
+      playerRef.current.alg;
+    }
+  }, [lastFacelets]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -41,4 +52,4 @@ const CubeDisplay = ({ minHeight }) => {
   );
 };
 
-export default CubeDisplay;
+export default TwistyPlayerPanel;

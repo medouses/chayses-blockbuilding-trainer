@@ -6,10 +6,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-import BluetoothContext from "../BluetoothContext";
+import SmartPuzzleContext from "../SmartPuzzleContext";
 
 const ConnectionDialog = () => {
-  const { deviceState, connect } = useContext(BluetoothContext);
+  const { deviceState, connect } = useContext(SmartPuzzleContext);
 
   return (
     <Dialog
@@ -20,7 +20,7 @@ const ConnectionDialog = () => {
       <DialogTitle id="alert-dialog-title">{"no cube connected"}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          to use this app, please connect a compatible (gan) smartcube
+          to use this app, please connect a compatible (gan) smart cube
         </DialogContentText>
       </DialogContent>
       <DialogActions>

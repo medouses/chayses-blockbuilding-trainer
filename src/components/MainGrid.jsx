@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-import CubeDisplay from "./CubeDisplay";
+import TwistyPlayerPanel from "./TwistyPlayerPanel";
 
 const MainGrid = () => {
   return (
@@ -24,7 +24,7 @@ const MainGrid = () => {
           </Paper>
         </Grid>
         <Grid size={6}>
-          <CubeDisplay minHeight="30vh" />
+          <TwistyPlayerPanel minHeight="30vh" />
         </Grid>
         <Grid size={6}>
           <Paper sx={{ padding: 2, minHeight: "30vh" }} />

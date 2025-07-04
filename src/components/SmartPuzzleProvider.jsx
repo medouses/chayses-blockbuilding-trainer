@@ -1,7 +1,7 @@
 import { useReducer, useRef, useCallback, useEffect } from "react";
 import { connectGanCube } from "gan-web-bluetooth";
 
-import BluetoothContext from "../BluetoothContext";
+import SmartPuzzleContext from "../SmartPuzzleContext";
 
 // hardcoded bullshit for gan_web_bluetooth library
 const PLACEHOLDER_CUBE_MAC_ADDRESS = "EC:FE:44:BA:E1:4A";
@@ -12,12 +12,25 @@ const initialDeviceState = {
   isConnected: false,
   deviceName: "",
   deviceMac: "",
-  // initialFacelets: "",
-  // moveHistory: [],
+  lastFacelets: "",
+  moveHistory: [],
 };
 
-const deviceReducer = (state, action) => {
+const deviceStateReducer = (state, action) => {
   switch (action.type) {
+    case "facelets_recieved":
+      return {
+        ...state,
+        lastFacelets: action.facelets,
+        moveHistory: [],
+      };
+    case "move_recieved":
+      return {
+        ...state,
+        moveHistory: state.moveHistory.concat(action.move),
+      };
+    case "disconnected":
+      return initialDeviceState;
     case "connected":
       return {
         ...state,
@@ -25,15 +38,26 @@ const deviceReducer = (state, action) => {
         deviceName: action.conn.deviceName,
         deviceMac: action.conn.deviceMAC,
       };
-    case "disconnected":
-      return initialDeviceState;
   }
 };
 
-const BluetoothProvider = ({ children }) => {
-  const [deviceState, dispatch] = useReducer(deviceReducer, initialDeviceState);
+const SmartPuzzleProvider = ({ children }) => {
+  const [deviceState, dispatch] = useReducer(
+    deviceStateReducer,
+    initialDeviceState
+  );
 
   const connectionRef = useRef(null);
+
+  const handleFacelets = (event) => {
+    dispatch({ type: "facelets_recieved", facelets: event.facelets });
+    console.log("facelets event handled:", event);
+  };
+
+  const handleMove = (event) => {
+    dispatch({ type: "move_recieved", move: event.move });
+    console.log("move event handled:", event);
+  };
 
   const handleDisconnect = () => {
     dispatch({ type: "disconnected" });
@@ -43,6 +67,12 @@ const BluetoothProvider = ({ children }) => {
 
   const handleCubeEvent = (event) => {
     switch (event.type) {
+      case "FACELETS":
+        handleFacelets(event);
+        break;
+      case "MOVE":
+        handleMove(event);
+        break;
       case "DISCONNECT":
         handleDisconnect();
         break;
@@ -64,7 +94,7 @@ const BluetoothProvider = ({ children }) => {
         connectionRef.current = conn;
         console.log("bluetooth connected!");
 
-        // subscribe to rxjs events
+        // subscribe to rxjs events and request initial facelets state
         conn.events$.subscribe(handleCubeEvent);
         await conn.sendCubeCommand({ type: "REQUEST_FACELETS" });
       },
@@ -77,10 +107,10 @@ const BluetoothProvider = ({ children }) => {
   useEffect(() => () => disconnect(), [disconnect]);
 
   return (
-    <BluetoothContext value={{ deviceState, connect, disconnect }}>
+    <SmartPuzzleContext value={{ deviceState, connect, disconnect }}>
       {children}
-    </BluetoothContext>
+    </SmartPuzzleContext>
   );
 };
 
-export default BluetoothProvider;
+export default SmartPuzzleProvider;
