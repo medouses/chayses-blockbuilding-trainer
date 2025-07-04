@@ -1,13 +1,13 @@
 import Box from "@mui/material/Box";
 
-import SmartPuzzleProvider from "./components/SmartPuzzleProvider";
+import SmartCubeProvider from "./components/SmartCubeProvider";
 import ConnectionDialog from "./components/ConnectionDialog";
 import MainGrid from "./components/MainGrid";
 import ConnectionAppBar from "./components/ConnectionAppBar";
 
 const App = () => {
   return (
-    <SmartPuzzleProvider>
+    <SmartCubeProvider>
       <ConnectionDialog />
       <Box
         sx={{
@@ -19,7 +19,7 @@ const App = () => {
         <MainGrid />
         <ConnectionAppBar />
       </Box>
-    </SmartPuzzleProvider>
+    </SmartCubeProvider>
   );
 };
 

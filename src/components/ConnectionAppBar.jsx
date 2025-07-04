@@ -4,10 +4,10 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-import SmartPuzzleContext from "../SmartPuzzleContext";
+import SmartCubeContext from "../SmartCubeContext";
 
 const ConnectionAppBar = () => {
-  const { deviceState, disconnect } = useContext(SmartPuzzleContext);
+  const { deviceState, disconnect } = useContext(SmartCubeContext);
 
   // show an error message if not connected
   if (!deviceState.isConnected) {

@@ -1,7 +1,7 @@
 import { useReducer, useRef, useCallback, useEffect } from "react";
 import { connectGanCube } from "gan-web-bluetooth";
 
-import SmartPuzzleContext from "../SmartPuzzleContext";
+import SmartCubeContext from "../SmartCubeContext";
 
 // hardcoded bullshit for gan_web_bluetooth library
 const PLACEHOLDER_CUBE_MAC_ADDRESS = "EC:FE:44:BA:E1:4A";
@@ -41,7 +41,7 @@ const deviceStateReducer = (state, action) => {
   }
 };
 
-const SmartPuzzleProvider = ({ children }) => {
+const SmartCubeProvider = ({ children }) => {
   const [deviceState, dispatch] = useReducer(
     deviceStateReducer,
     initialDeviceState
@@ -51,18 +51,18 @@ const SmartPuzzleProvider = ({ children }) => {
 
   const handleFacelets = (event) => {
     dispatch({ type: "facelets_recieved", facelets: event.facelets });
-    console.log("facelets event handled:", event);
+    console.debug("facelets event handled:", event);
   };
 
   const handleMove = (event) => {
     dispatch({ type: "move_recieved", move: event.move });
-    console.log("move event handled:", event);
+    console.debug("move event handled:", event);
   };
 
   const handleDisconnect = () => {
     dispatch({ type: "disconnected" });
     connectionRef.current = null;
-    console.log("bluetooth disconnected!");
+    console.debug("bluetooth disconnected!");
   };
 
   const handleCubeEvent = (event) => {
@@ -77,7 +77,7 @@ const SmartPuzzleProvider = ({ children }) => {
         handleDisconnect();
         break;
       default:
-        console.log("unhandled cube event recieved:", event);
+        console.debug("unhandled cube event recieved:", event);
     }
   };
 
@@ -92,7 +92,7 @@ const SmartPuzzleProvider = ({ children }) => {
 
         dispatch({ type: "connected", conn: conn });
         connectionRef.current = conn;
-        console.log("bluetooth connected!");
+        console.debug("bluetooth connected!");
 
         // subscribe to rxjs events and request initial facelets state
         conn.events$.subscribe(handleCubeEvent);
@@ -107,10 +107,10 @@ const SmartPuzzleProvider = ({ children }) => {
   useEffect(() => () => disconnect(), [disconnect]);
 
   return (
-    <SmartPuzzleContext value={{ deviceState, connect, disconnect }}>
+    <SmartCubeContext value={{ deviceState, connect, disconnect }}>
       {children}
-    </SmartPuzzleContext>
+    </SmartCubeContext>
   );
 };
 
-export default SmartPuzzleProvider;
+export default SmartCubeProvider;

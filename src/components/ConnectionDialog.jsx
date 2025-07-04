@@ -6,10 +6,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-import SmartPuzzleContext from "../SmartPuzzleContext";
+import SmartCubeContext from "../SmartCubeContext";
 
 const ConnectionDialog = () => {
-  const { deviceState, connect } = useContext(SmartPuzzleContext);
+  const { deviceState, connect } = useContext(SmartCubeContext);
 
   return (
     <Dialog

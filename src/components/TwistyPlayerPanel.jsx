@@ -1,19 +1,30 @@
 import { useRef, useContext, useEffect } from "react";
-import { TwistyPlayer } from "cubing/twisty";
 import Paper from "@mui/material/Paper";
+import { TwistyPlayer } from "cubing/twisty";
+import { experimentalSolve3x3x3IgnoringCenters } from "cubing/search";
+import { faceletsToPattern } from "gan-cube-sample-utils";
 
-import SmartPuzzleContext from "../SmartPuzzleContext";
+import SmartCubeContext from "../SmartCubeContext";
 
 const TwistyPlayerPanel = ({ minHeight }) => {
   const containerRef = useRef(null);
   const playerRef = useRef(null);
 
-  const { deviceState } = useContext(SmartPuzzleContext);
+  const { deviceState } = useContext(SmartCubeContext);
   const { lastFacelets } = deviceState;
 
   useEffect(() => {
-    if (playerRef.current) {
-      playerRef.current.alg;
+    const setFacelets = async () => {
+      const kPattern = faceletsToPattern(lastFacelets);
+      const solution = await experimentalSolve3x3x3IgnoringCenters(kPattern);
+      const scramble = solution.invert();
+
+      playerRef.current.alg = scramble;
+      console.debug("twistyplayer alg updated:", scramble);
+    };
+
+    if (playerRef.current && lastFacelets) {
+      setFacelets().catch(console.error);
     }
   }, [lastFacelets]);
 
