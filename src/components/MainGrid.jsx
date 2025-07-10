@@ -1,10 +1,10 @@
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 
+import ScramblePanel from "./ScramblePanel";
 import TwistyPlayerPanel from "./TwistyPlayerPanel";
+import OptionsPanel from "./OptionsPanel";
 
 const MainGrid = () => {
   return (
@@ -19,9 +19,7 @@ const MainGrid = () => {
     >
       <Grid container spacing={2} sx={{ width: "50vw" }}>
         <Grid size={12}>
-          <Paper sx={{ padding: 2 }}>
-            <Typography variant="h6">test</Typography>
-          </Paper>
+          <ScramblePanel />
         </Grid>
         <Grid size={6}>
           <TwistyPlayerPanel minHeight="30vh" />
@@ -30,9 +28,7 @@ const MainGrid = () => {
           <Paper sx={{ padding: 2, minHeight: "30vh" }} />
         </Grid>
         <Grid size={12}>
-          <Paper sx={{ padding: 2 }}>
-            <Button>test</Button>
-          </Paper>
+          <OptionsPanel />
         </Grid>
       </Grid>
     </Box>

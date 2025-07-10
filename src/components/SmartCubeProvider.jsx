@@ -2,35 +2,23 @@ import { useReducer, useRef, useCallback, useEffect } from "react";
 import { connectGanCube } from "gan-web-bluetooth";
 
 import SmartCubeContext from "../SmartCubeContext";
+import { faceletsToScramble } from "../utils";
 
 // hardcoded bullshit for gan_web_bluetooth library
 const PLACEHOLDER_CUBE_MAC_ADDRESS = "EC:FE:44:BA:E1:4A";
 const customMacAddressProvider = () =>
   Promise.resolve(PLACEHOLDER_CUBE_MAC_ADDRESS);
 
-const initialDeviceState = {
+const initialSmartCubeState = {
   isConnected: false,
   deviceName: "",
   deviceMac: "",
-  lastFacelets: "",
+  initialAlg: "",
   moveHistory: [],
 };
 
-const deviceStateReducer = (state, action) => {
+const smartCubeReducer = (state, action) => {
   switch (action.type) {
-    case "facelets_recieved":
-      return {
-        ...state,
-        lastFacelets: action.facelets,
-        moveHistory: [],
-      };
-    case "move_recieved":
-      return {
-        ...state,
-        moveHistory: state.moveHistory.concat(action.move),
-      };
-    case "disconnected":
-      return initialDeviceState;
     case "connected":
       return {
         ...state,
@@ -38,19 +26,40 @@ const deviceStateReducer = (state, action) => {
         deviceName: action.conn.deviceName,
         deviceMac: action.conn.deviceMAC,
       };
+    case "disconnected":
+      return initialSmartCubeState;
+    case "facelets_recieved":
+      return {
+        ...state,
+        initialAlg: action.alg,
+        moveHistory: [],
+      };
+    case "move_recieved":
+      return {
+        ...state,
+        moveHistory: state.moveHistory.concat(action.move),
+      };
   }
 };
 
 const SmartCubeProvider = ({ children }) => {
-  const [deviceState, dispatch] = useReducer(
-    deviceStateReducer,
-    initialDeviceState
+  const [smartCube, dispatch] = useReducer(
+    smartCubeReducer,
+    initialSmartCubeState
   );
 
   const connectionRef = useRef(null);
 
-  const handleFacelets = (event) => {
-    dispatch({ type: "facelets_recieved", facelets: event.facelets });
+  const handleDisconnect = () => {
+    dispatch({ type: "disconnected" });
+    connectionRef.current = null;
+    console.debug("bluetooth disconnected!");
+  };
+
+  const handleFacelets = async (event) => {
+    const scramble = await faceletsToScramble(event.facelets);
+
+    dispatch({ type: "facelets_recieved", alg: scramble });
     console.debug("facelets event handled:", event);
   };
 
@@ -59,31 +68,21 @@ const SmartCubeProvider = ({ children }) => {
     console.debug("move event handled:", event);
   };
 
-  const handleDisconnect = () => {
-    dispatch({ type: "disconnected" });
-    connectionRef.current = null;
-    console.debug("bluetooth disconnected!");
-  };
-
   const handleCubeEvent = (event) => {
     switch (event.type) {
+      case "DISCONNECT":
+        handleDisconnect();
+        break;
       case "FACELETS":
         handleFacelets(event);
         break;
       case "MOVE":
         handleMove(event);
         break;
-      case "DISCONNECT":
-        handleDisconnect();
-        break;
       default:
         console.debug("unhandled cube event recieved:", event);
     }
   };
-
-  const disconnect = useCallback(async () => {
-    await connectionRef.current?.disconnect();
-  }, []);
 
   const connect = async () => {
     await connectGanCube(customMacAddressProvider).then(
@@ -104,10 +103,18 @@ const SmartCubeProvider = ({ children }) => {
     );
   };
 
+  const disconnect = useCallback(async () => {
+    await connectionRef.current?.disconnect();
+  }, []);
+
+  const reset = async () => {
+    await connectionRef.current?.sendCubeCommand({ type: "REQUEST_RESET" });
+  };
+
   useEffect(() => () => disconnect(), [disconnect]);
 
   return (
-    <SmartCubeContext value={{ deviceState, connect, disconnect }}>
+    <SmartCubeContext value={{ smartCube, connect, disconnect, reset }}>
       {children}
     </SmartCubeContext>
   );

@@ -9,11 +9,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import SmartCubeContext from "../SmartCubeContext";
 
 const ConnectionDialog = () => {
-  const { deviceState, connect } = useContext(SmartCubeContext);
+  const { smartCube, connect } = useContext(SmartCubeContext);
 
   return (
     <Dialog
-      open={!deviceState.isConnected}
+      open={!smartCube.isConnected}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >

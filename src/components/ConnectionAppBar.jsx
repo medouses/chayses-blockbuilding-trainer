@@ -7,10 +7,9 @@ import Button from "@mui/material/Button";
 import SmartCubeContext from "../SmartCubeContext";
 
 const ConnectionAppBar = () => {
-  const { deviceState, disconnect } = useContext(SmartCubeContext);
+  const { smartCube, disconnect, reset } = useContext(SmartCubeContext);
 
-  // show an error message if not connected
-  if (!deviceState.isConnected) {
+  if (!smartCube.isConnected) {
     return (
       <AppBar position="static" color="error" enableColorOnDark>
         <Toolbar variant="dense">
@@ -25,10 +24,13 @@ const ConnectionAppBar = () => {
   return (
     <AppBar position="static">
       <Toolbar variant="dense">
-        <Typography sx={{ mr: 3 }}>cube: {deviceState.deviceName}</Typography>
+        <Typography sx={{ mr: 3 }}>cube: {smartCube.deviceName}</Typography>
         <Typography sx={{ flexGrow: 1 }}>
-          mac address: {deviceState.deviceMac}
+          mac address: {smartCube.deviceMac}
         </Typography>
+        <Button onClick={reset} sx={{ mr: 3 }}>
+          reset to solved
+        </Button>
         <Button onClick={disconnect}>disconnect cube</Button>
       </Toolbar>
     </AppBar>

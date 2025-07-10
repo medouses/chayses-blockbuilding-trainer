@@ -2,6 +2,7 @@ import Box from "@mui/material/Box";
 
 import SmartCubeProvider from "./components/SmartCubeProvider";
 import ConnectionDialog from "./components/ConnectionDialog";
+import ExerciseProvider from "./components/ExerciseProvider";
 import MainGrid from "./components/MainGrid";
 import ConnectionAppBar from "./components/ConnectionAppBar";
 
@@ -16,7 +17,9 @@ const App = () => {
           height: "100vh",
         }}
       >
-        <MainGrid />
+        <ExerciseProvider>
+          <MainGrid />
+        </ExerciseProvider>
         <ConnectionAppBar />
       </Box>
     </SmartCubeProvider>
